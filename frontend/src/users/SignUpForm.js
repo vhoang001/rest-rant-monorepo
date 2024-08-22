@@ -74,4 +74,18 @@ function SignUpForm() {
 	)
 }
 
+<form onSubmit={handleSubmit}>
+  {/* existing form fields */}
+  <div className="container">
+    <label htmlFor="password">Password</label>
+    <input
+      type="password"
+      id="password"
+      name="password"
+      required
+    />
+  </div>
+  <button type="submit">Sign Up</button>
+</form>
+
 export default SignUpForm

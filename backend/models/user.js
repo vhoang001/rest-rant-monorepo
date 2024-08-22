@@ -27,3 +27,14 @@ module.exports = (sequelize, DataTypes) => {
   });
   return User;
 };
+
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define('User', {
+    // existing fields
+    password_digest: {
+      type: DataTypes.STRING,
+      allowNull: false
+    }
+  });
+  return User;
+};
