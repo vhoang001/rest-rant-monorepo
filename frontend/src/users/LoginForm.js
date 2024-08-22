@@ -21,6 +21,55 @@ function LoginForm() {
 
     }
 
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const data = Object.fromEntries(formData.entries());
+        
+        try {
+          const response = await fetch('/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+          });
+          
+          if (response.ok) {
+            console.log("IN HERE");
+            // Handle successful login
+          } else {
+            const error = await response.json();
+            console.error('Login failed:', error);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      };
+    
+      const handleSubmit = async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const data = Object.fromEntries(formData.entries());
+        
+        try {
+          const response = await fetch('/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+          });
+          
+          if (response.ok) {
+            const user = await response.json();
+            console.log('Logged in as:', user.username);
+            // Handle successful login, e.g., updating context or state
+          } else {
+            const error = await response.json();
+            alert('Login failed: ' + error.error);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      };
+      
     return (
         <main>
             <h1>Login</h1>
@@ -64,5 +113,5 @@ function LoginForm() {
         </main>
     )
 }
-
+  
 export default LoginForm

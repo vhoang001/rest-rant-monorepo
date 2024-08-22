@@ -35,3 +35,6 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 module.exports = db;
+
+const authController = require('./controllers/authentication');
+app.use('/auth', authController);
