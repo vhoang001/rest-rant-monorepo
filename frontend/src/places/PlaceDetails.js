@@ -2,6 +2,28 @@ import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router"
 import CommentCard from './CommentCard'
 import NewCommentForm from "./NewCommentForm";
+import React, { useContext } from 'react';
+import { CurrentUserContext } from '../contexts/CurrentUser';
+
+const PlaceDetails = ({ place }) => {
+  const { currentUser } = useContext(CurrentUserContext);
+
+  return (
+    <div>
+      <h1>{place.name}</h1>
+      {currentUser && currentUser.role === 'admin' && (
+        <div>
+          <a href={`/places/${place.id}/edit`}>Edit</a>
+          <button onClick={() => handleDelete(place.id)}>Delete</button>
+        </div>
+      )}
+      {/* Other place details */}
+    </div>
+  );
+};
+
+export default PlaceDetails;
+
 
 function PlaceDetails() {
 

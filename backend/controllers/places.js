@@ -13,6 +13,36 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
+const { User } = require('../models');
+
+const createPlace = async (req, res) => {
+  const user = await User.findByPk(req.user.id);
+  if (user.role !== 'admin') {
+    return res.status(403).json({ error: 'Permission denied' });
+  }
+
+  // Place creation logic
+};
+
+const editPlace = async (req, res) => {
+  const user = await User.findByPk(req.user.id);
+  if (user.role !== 'admin') {
+    return res.status(403).json({ error: 'Permission denied' });
+  }
+
+  // Place editing logic
+};
+
+const deletePlace = async (req, res) => {
+  const user = await User.findByPk(req.user.id);
+  if (user.role !== 'admin') {
+    return res.status(403).json({ error: 'Permission denied' });
+  }
+
+  // Place deletion logic
+};
+
+
 router.get('/me', async (req, res) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.status(401).json({ error: 'No token provided' });

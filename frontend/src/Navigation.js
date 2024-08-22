@@ -1,6 +1,26 @@
 import { useState, useEffect, useContext } from 'react'
 import { useHistory } from "react-router";
 import { CurrentUser } from './contexts/CurrentUser';
+import React, { useContext } from 'react';
+import { CurrentUserContext } from '../contexts/CurrentUser';
+
+const Navigation = () => {
+  const { currentUser } = useContext(CurrentUserContext);
+
+  return (
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        {currentUser && currentUser.role === 'admin' && (
+          <li><a href="/places/new">Add Place</a></li>
+        )}
+        {/* Other nav items */}
+      </ul>
+    </nav>
+  );
+};
+
+export default Navigation;
 
 function Navigation() {
 

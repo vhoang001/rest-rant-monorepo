@@ -38,3 +38,9 @@ module.exports = (sequelize, DataTypes) => {
   });
   return User;
 };
+
+role: {
+  type: Sequelize.ENUM('reviewer', 'admin'),
+  defaultValue: 'reviewer',
+  allowNull: false
+}
