@@ -113,5 +113,32 @@ function LoginForm() {
         </main>
     )
 }
-  
+
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const data = Object.fromEntries(formData.entries());
+
+  try {
+    const response = await fetch('/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+      const { user, token } = await response.json();
+      localStorage.setItem('jwt', token);
+      // Update context or state with user data
+    } else {
+      const error = await response.json();
+      alert('Login failed: ' + error.error);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
+console.log(localStorage.getItem('jwt'));
+
 export default LoginForm

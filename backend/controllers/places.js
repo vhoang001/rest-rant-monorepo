@@ -3,6 +3,68 @@ const db = require("../models")
 
 const { Place, Comment, User } = db
 
+const jwt = require('jsonwebtoken');
+const User = require('../models/user');
+
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const User = require('../models/user');
+
+const jwt = require('jsonwebtoken');
+const User = require('../models/user');
+
+router.get('/me', async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.status(401).json({ error: 'No token provided' });
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findByPk(decoded.id);
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    res.status(401).json({ error: 'Invalid token' });
+  }
+});
+
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ where: { email } });
+    if (!user) return res.status(401).json({ error: 'Invalid credentials' });
+
+    const isMatch = await bcrypt.compare(password, user.password_digest);
+    if (!isMatch) return res.status(401).json({ error: 'Invalid credentials' });
+
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    res.json({ user, token });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/me', async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.status(401).json({ error: 'No token provided' });
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findByPk(decoded.id);
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    res.status(401).json({ error: 'Invalid token' });
+  }
+});
+
 router.post('/', async (req, res) => {
     if (!req.body.pic) {
         req.body.pic = 'http://placekitten.com/400/400'

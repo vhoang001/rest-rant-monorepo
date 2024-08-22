@@ -1,17 +1,55 @@
-import { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from 'react';
 
+export const CurrentUserContext = createContext();
 
-export const CurrentUser = createContext()
+export const CurrentUserProvider = ({ children }) => {
+  const [currentUser, setCurrentUser] = useState(null);
 
-function CurrentUserProvider({ children }){
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const response = await fetch('/auth/me', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+          },
+        });
+        if (response.ok) {
+          const user = await response.json();
+          setCurrentUser(user);
+        } else {
+          setCurrentUser(null);
+        }
+      } catch (error) {
+        console.error('Failed to fetch current user:', error);
+      }
+    };
 
-    const [currentUser, setCurrentUser] = useState(null)
+    fetchCurrentUser();
+  }, []);
 
-    return (
-        <CurrentUser.Provider value={{ currentUser, setCurrentUser }}>
-            {children}
-        </CurrentUser.Provider>
-    )
-}
+  return (
+    <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
+      {children}
+    </CurrentUserContext.Provider>
+  );
+};
 
-export default CurrentUserProvider
+const fetchCurrentUser = async () => {
+    try {
+      const response = await fetch('/auth/me', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+        },
+      });
+  
+      if (response.ok) {
+        const user = await response.json();
+        setCurrentUser(user);
+      } else {
+        setCurrentUser(null);
+      }
+    } catch (error) {
+      console.error('Failed to fetch current user:', error);
+    }
+  };
+  
